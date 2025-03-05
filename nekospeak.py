@@ -11,7 +11,7 @@ class NekoSpeakModule(loader.Module):
     def __init__(self):
         self.active = False
         self.pm_enabled = False
-        self.public_enabled = True
+        self.public_enabled = False
 
     def neko_speak(self, text):
         # Замена "н" на "ня" в некоторых словах
@@ -25,12 +25,18 @@ class NekoSpeakModule(loader.Module):
 
         # Замена стандартных фраз
         replacements = {
-            "нет": "нят",
+            "нет ": "нят",
+            " нет ": "нят",
+            " нет": "нят",
             "ничего": "нячего",
-            "но": "ня",
-            "что": "ня?",
-            "ура": "ня!",
+            " но": " ня",
+            " но ": " ня ",
+            "но ": "ня ",
+            "что?": "ня?",
+            "ура!": "ня!",
             "о нет": "о-ня!"
+            "мур": "муррр",
+            "пре": "пррре",
         }
         for key, value in replacements.items():
             text = text.replace(key, value)
