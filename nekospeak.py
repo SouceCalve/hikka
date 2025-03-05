@@ -20,7 +20,7 @@ class NekoSpeakModule(loader.Module):
         new_words = []
         for word in words:
             if word.lower().startswith("н") and len(word) > 1:
-                word = "ня" + word[1:]
+                word = "ня" + word[2:]
             new_words.append(word)
         text = " ".join(new_words)
 
@@ -43,7 +43,8 @@ class NekoSpeakModule(loader.Module):
             "хорошо":"мяу-ряско",
             "плохо":"мяу-чалька",
             "пиздец":"Мря!",
-            "блять":"Мяр!"
+            "блять":"Мяр!",
+            "замечательных":"замуррчательных"
         }
         for key, value in replacements.items():
             text = text.replace(key, value)
