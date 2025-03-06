@@ -48,6 +48,8 @@ class NekoSpeakModule(loader.Module):
             "пиздец":"Мря!",
             "блять":"Мяр!",
             "замечательных":"замуррчательных"
+            "няко":"неко",
+            "нядо":"надо"
         }
         for key, value in replacements.items():
             text = text.replace(key, value)
