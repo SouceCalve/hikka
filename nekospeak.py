@@ -21,7 +21,6 @@ class NekoSpeakModule(loader.Module):
         for word in words:
             if word.lower().startswith("н") and len(word) > 1:
                 word = "ня" + word[2:]
-            new_words.append(word)
             if word.lower().startswith("р") and len(word) > 1:
                 word = "ррр" + word[1:]
             new_words.append(word)
