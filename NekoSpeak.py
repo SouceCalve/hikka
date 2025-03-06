@@ -1,6 +1,6 @@
 from hikkatl.types import Message
 from .. import loader, utils
-from random import randint
+import random
 @loader.tds
 class NekoSpeakModule(loader.Module):
     """Модуль для стилизации речи под неко"""
@@ -20,7 +20,7 @@ class NekoSpeakModule(loader.Module):
         for word in words:
             if word.lower().startswith("н") and len(word) > 1:
                 word = "ня" + word[2:]
-            word=word.replace("р","р"*randint(2,4))
+            word=word.replace("р","р"*random.randint(2,4))
             new_words.append(word)
         text = " ".join(new_words)
 
