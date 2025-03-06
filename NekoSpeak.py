@@ -104,4 +104,5 @@ class NekoSpeakModule(loader.Module):
             if not message.is_private and not self.public_enabled:
                 return
             new_text = self.neko_speak(message.text)
-            await message.edit(new_text)
+            if new_text != message.text:
+                await message.edit(new_text)
