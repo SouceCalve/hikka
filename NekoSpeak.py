@@ -15,7 +15,7 @@ class NekoSpeakModule(loader.Module):
         self.exclude_chats = set()
 
     async def config_complete(self):
-        self.exclude_chats = set(self.get(self, "exclude_chats", []))  # Загружаем список из БД
+        self.exclude_chats = set(self.get("exclude_chats", []))  # Загружаем из БД
 
 
     def neko_speak(self, text):
@@ -133,7 +133,7 @@ class NekoSpeakModule(loader.Module):
             self.exclude_chats.add(chat_id)
             status = "добавлен в"
 
-        self.set(self, "exclude_chats", list(self.exclude_chats))  # Сохраняем в виде списка!
+        self.set("exclude_chats", list(self.exclude_chats))  # Сохраняем как список
 
         await utils.answer(message, f"Чат {status} списка исключений!")
 
