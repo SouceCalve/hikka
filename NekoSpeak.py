@@ -15,7 +15,7 @@ class NekoSpeakModule(loader.Module):
         self.exclude_chats = set()
 
     async def config_complete(self):
-        self.exclude_chats = set(self._db.get(self, "exclude_chats", []))  # Загружаем список из БД
+        self.exclude_chats = set(self.get(self, "exclude_chats", []))  # Загружаем список из БД
 
 
     def neko_speak(self, text):
@@ -121,20 +121,21 @@ class NekoSpeakModule(loader.Module):
         status = "включено" if self.public_enabled else "выключено"
         await utils.answer(message, f"Ня! Преобразование в публичных чатах теперь {status}.")
 
-    @loader.command(ru_doc="Добавить или убрать чат из исключений")
+    @loader.command(ru_doc="Добавить/удалить чат из исключений для nekospeakpm")
     async def nekospeakpmexclude(self, message: Message):
-        """Добавить или убрать текущий чат из исключений"""
+        """Добавить/удалить чат из исключений для nekospeakpm"""
         chat_id = message.chat_id
 
         if chat_id in self.exclude_chats:
             self.exclude_chats.remove(chat_id)
-            self._db.set(self, "exclude_chats", list(self.exclude_chats))  # Сохранение исключений
-            await utils.answer(message, "Ня! Теперь этот чат **не** в исключениях.")
+            status = "удалён из"
         else:
             self.exclude_chats.add(chat_id)
-            self._db.set(self, "exclude_chats", list(self.exclude_chats))  # Сохранение исключений
-            await utils.answer(message, "Ня! Этот чат теперь в исключениях, и сообщения не будут меняться.")
+            status = "добавлен в"
 
+        self.set(self, "exclude_chats", list(self.exclude_chats))  # Сохраняем в виде списка!
+
+        await utils.answer(message, f"Чат {status} списка исключений!")
 
 
     async def watcher(self, message: Message):
