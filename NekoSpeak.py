@@ -116,30 +116,9 @@ class NekoSpeakModule(loader.Module):
         status = "включено" if self.public_enabled else "выключено"
         await utils.answer(message, f"Ня! Преобразование в публичных чатах теперь {status}.")
 
-    @loader.command(ru_doc="Добавить или убрать чат из исключений")
-    async def nekospeakpmexclude(self, message: Message):
-        """Добавить или убрать текущий чат из исключений"""
-        chat_id = message.chat_id
-
-        if chat_id in self.exclude_chats:
-            self.exclude_chats.remove(chat_id)
-            self._db.set(self, "exclude_chats", list(self.exclude_chats))  # Сохранение исключений
-            await utils.answer(message, "Ня! Теперь этот чат **не** в исключениях.")
-        else:
-            self.exclude_chats.add(chat_id)
-            self._db.set(self, "exclude_chats", list(self.exclude_chats))  # Сохранение исключений
-            await utils.answer(message, "Ня! Этот чат теперь в исключениях, и сообщения не будут меняться.")
-
-
-
     async def watcher(self, message: Message):
         if not self.active:
             return
-
-        chat_id = message.chat_id
-        if chat_id in self.exclude_chats:
-            return
-
         if message.out:
             if message.is_private and not self.pm_enabled:
                 return
