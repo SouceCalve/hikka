@@ -12,7 +12,7 @@ class NekoSpeakModule(loader.Module):
         self.pm_enabled = False
         self.public_enabled = False
         self.realcatlike = False
-        self.exclude_chats = set(self._db.get(self, "exclude_chats", []))  # Загружаем список из БД
+        self.exclude_chats = set()
 
     def neko_speak(self, text):
         # Замена "н" на "ня" в некоторых словах
