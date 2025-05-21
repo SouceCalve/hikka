@@ -22,7 +22,11 @@ class NekoSpeakModule(loader.Module):
         self.pm_enabled = False
         self.public_enabled = False
         # Загружаем из БД или создаём новый список
-        self.banned_chats = set(self.db.get("NekoSpeak", "banned_chats", []))
+        self.banned_chats = set()
+
+    async def client_ready(self):
+        saved = self.db.get("NekoSpeak", "banned_chats", [])
+        self.banned_chats = set(saved)
 
     def save_banned_chats(self):
         # Сохраняем список забаненных чатов в БД
