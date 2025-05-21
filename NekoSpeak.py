@@ -78,7 +78,7 @@ class NekoSpeakModule(loader.Module):
         if not text:
             return await utils.answer(message, "Ня? Введи текст!")
         converted_text = self.neko_speak(text)
-        await utils.answer(message, self.strings("Держи, ня!").format(text=converted_text))
+        await utils.answer(message, self.strings("converted").format(text=converted_text))
 
     @loader.command(ru_doc="Включить автоматическое преобразование речи в неко-стиль")
     async def nekospeak(self, message: Message):
@@ -117,12 +117,12 @@ class NekoSpeakModule(loader.Module):
             chat_id = message.chat_id
 
         if chat_id in self.banned_chats:
-            await utils.answer(message, self.strings("Он уже в бане, фырр..."))
+            await utils.answer(message, self.strings("already_banned"))
             return
 
         self.banned_chats.add(chat_id)
         self.save_banned_chats()
-        await utils.answer(message, self.strings("Бян нахуй!").format(str(chat_id)))
+        await utils.answer(message, self.strings("banned").format(str(chat_id)))
 
     @loader.command(ru_doc="Разблокировать чат")
     async def nekospeakin(self, message: Message):
@@ -139,17 +139,17 @@ class NekoSpeakModule(loader.Module):
             chat_id = message.chat_id
 
         if chat_id not in self.banned_chats:
-            await utils.answer(message, self.strings("А он точно здесь, ня?"))
+            await utils.answer(message, self.strings("not_banned"))
             return
 
         self.banned_chats.remove(chat_id)
         self.save_banned_chats()
-        await utils.answer(message, self.strings("Я выпустила его из цепких лапок, ня!").format(str(chat_id)))
+        await utils.answer(message, self.strings("converted").format(str(chat_id)))
 
     @loader.command(ru_doc="Показать список заблокированных чатов (только в ЛС)")
     async def nekospeaklist(self, message: Message):
         if not message.is_private:
-            await utils.answer(message, self.strings("Я не буду такое говорить, ня!"))
+            await utils.answer(message, self.strings("no_access"))
             return
 
         if not self.banned_chats:
@@ -157,7 +157,7 @@ class NekoSpeakModule(loader.Module):
             return
 
         banned_list = "\n".join([f"- {chat}" for chat in self.banned_chats])
-        await utils.answer(message, self.strings("Списочек:").format(banned_list))
+        await utils.answer(message, self.strings("banned_list").format(banned_list))
 
     async def watcher(self, message: Message):
         if not self.active:
