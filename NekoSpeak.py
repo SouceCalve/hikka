@@ -144,7 +144,7 @@ class NekoSpeakModule(loader.Module):
 
         self.banned_chats.remove(chat_id)
         self.save_banned_chats()
-        await utils.answer(message, self.strings("converted").format(str(chat_id)))
+        await utils.answer(message, self.strings("unbanned").format(str(chat_id)))
 
     @loader.command(ru_doc="Показать список заблокированных чатов (только в ЛС)")
     async def nekospeaklist(self, message: Message):
