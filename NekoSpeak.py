@@ -49,7 +49,7 @@ class NekoSpeakModule(loader.Module):
             words = text.split()
             new_words = []
             for word in words:
-                if word.lower().startswith("н") and len(word) > 2: and random.random() < 0.05:
+                if word.lower().startswith("н") and len(word) > 2 and random.random() < 0.05:
                     word = "ня" + word[2:]
                 if random.random() < 0.05:
                     word = word.replace("р", "р" * random.randint(2,4))
