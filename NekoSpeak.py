@@ -33,7 +33,7 @@ class NekoSpeakModule(loader.Module):
         self.db.set("NekoSpeak", "banned_chats", list(self.banned_chats))
 
 
-    def is_encrypt(text):
+    def is_encrypt(self, text):
         flag = False
         encrypting_count=0
         for x in range(1,3):
