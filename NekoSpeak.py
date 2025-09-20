@@ -49,10 +49,11 @@ class NekoSpeakModule(loader.Module):
             words = text.split()
             new_words = []
             for word in words:
-                if word.lower().startswith("н") and len(word) > 2: #and random.random() < 0.2:
+                if word.lower().startswith("н") and len(word) > 2: and random.random() < 0.05:
                     word = "ня" + word[2:]
-                word = word.replace("р", "р" * random.randint(2,4))
-                word = word.replace("r", "r" * random.randint(2,4))
+                if random.random() < 0.05:
+                    word = word.replace("р", "р" * random.randint(2,4))
+                    word = word.replace("r", "r" * random.randint(2,4))
                 new_words.append(word)
             text = " ".join(new_words)
 
@@ -79,11 +80,12 @@ class NekoSpeakModule(loader.Module):
             specialchar = [",",".","<",">","/","''",'""',":",";","{","}","[","]","|","!","@","#","$","%","^","&","?","*","(",")","-","_","+","=","`","~","№"]
 
             for key, value in replacements.items():
-                text = text.replace(key, value)
+                if(random.random()<0.05):
+                    text = text.replace(key, value)
 
-            if random.random() < 0.3:
+            if random.random() < 0.05:
                     text += " мяу~"
-            elif random.random() < 0.2:
+            elif random.random() < 0.05:
                 if(text[-1:] in specialchar):
                     text=text[:-1]+"-ня"+text[-1:]
                 else:
