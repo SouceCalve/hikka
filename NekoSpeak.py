@@ -34,6 +34,7 @@ class NekoSpeakModule(loader.Module):
 
     def neko_speak(self, text):
         encrypting_count = 0
+        sp_char = False
         for x in range(1,3):
             if("=" in text[-x]):
                 encrypting_count+=1
@@ -74,7 +75,10 @@ class NekoSpeakModule(loader.Module):
             for key, value in replacements.items():
                 text = text.replace(key, value)
 
-            if(text[-1:] in specialchar): sp_char = True
+
+
+            if(text[-1:] in specialchar):
+                sp_char = True
 
 
             if random.random() < 0.3:
