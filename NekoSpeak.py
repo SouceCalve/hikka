@@ -32,14 +32,20 @@ class NekoSpeakModule(loader.Module):
         # Сохраняем список забаненных чатов в БД
         self.db.set("NekoSpeak", "banned_chats", list(self.banned_chats))
 
-    def neko_speak(self, text):
-        encrypting_count = 0
-        sp_char = False
+
+    def is_encrypt(text):
+        flag = False
+        encrypting_count=0
         for x in range(1,3):
             if("=" in text[-x]):
                 encrypting_count+=1
+            if(encrypting_count>=1):
+                flag = True
+        return flag
 
-        if(encrypting_count<2):
+    def neko_speak(self, text):
+
+        if(not is_encrypt(text)):
             words = text.split()
             new_words = []
             for word in words:
@@ -75,19 +81,10 @@ class NekoSpeakModule(loader.Module):
             for key, value in replacements.items():
                 text = text.replace(key, value)
 
-
-
-            if(text[-1:] in specialchar):
-                sp_char = True
-
-
             if random.random() < 0.3:
-                if(sp_char):
-                    text=text[:-1]+" мяу~"+text[-1:]
-                else:
                     text += " мяу~"
             elif random.random() < 0.2:
-                if(sp_char):
+                if(text[-1:] in specialchar):
                     text=text[:-1]+"-ня"+text[-1:]
                 else:
                     text += "-ня"
