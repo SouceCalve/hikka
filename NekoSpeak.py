@@ -45,7 +45,7 @@ class NekoSpeakModule(loader.Module):
 
     def neko_speak(self, text):
 
-        if(not is_encrypt(text)):
+        if(not self.is_encrypt(text)):
             words = text.split()
             new_words = []
             for word in words:
