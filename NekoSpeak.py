@@ -23,6 +23,7 @@ class NekoSpeakModule(loader.Module):
         self.public_enabled = False
         # Загружаем из БД или создаём новый список
         self.banned_chats = set()
+        self.bad_minded = False
 
     async def client_ready(self):
         saved = self.db.get("NekoSpeak", "banned_chats", [])
@@ -32,43 +33,64 @@ class NekoSpeakModule(loader.Module):
         # Сохраняем список забаненных чатов в БД
         self.db.set("NekoSpeak", "banned_chats", list(self.banned_chats))
 
+
+    def is_encrypt(self, text):
+        flag = False
+        encrypting_count=0
+        for x in range(1,3):
+            if("=" in text[-x]):
+                encrypting_count+=1
+            if(encrypting_count>=1):
+                flag = True
+        return flag
+
     def neko_speak(self, text):
-        words = text.split()
-        new_words = []
-        for word in words:
-            if word.lower().startswith("н") and len(word) > 1:
-                word = "ня" + word[2:]
-            word = word.replace("р", "р" * random.randint(2,4))
-            new_words.append(word)
-        text = " ".join(new_words)
 
-        replacements = {
-            "ничего": "нячего", "что?": "ня?", "ура!": "ня!", "о нет": "о-ня!",
-            "привет": "мяувет", "Привет": "Мяувет", "хорошо":"мяу-ряско",
-            "плохо":"мяу-чалька", "пиздец":"мря!", "Пиздец":"Мря!",
-            "блять":"мяр!", "Блять":"Мяр!", "замечательные":"замуррчательные",
-            "замечательный":"замуррчательный", "замечательных":"замуррчательных",
-            "Замечательные":"Замуррчательные", "Замечательный":"Замуррчательный",
-            "Замечательных":"Замуррчательных", "прекрасное":"замурчательное",
-            "Прекрасное":"Замурчательное", "прекрасный":"замурчательный",
-            "Прекрасный":"Замурчательный", "прекрасная":"замурчательная",
-            "Прекрасная":"Замурчательная", "заебись":"замурчательно",
-            "Заебись":"Замурчательно", "охуенно":"замурчательно",
-            "Охуенно":"Замурчательно", "няхуя":"МРЯВ?! Ньё-ньё!!",
-            "Няхуя":"МРЯВ?! Ньё-ньё!!", "няко":"неко", "Няко":"неко",
-            "нядо":"надо", "Нядо":"Надо", "В рот ебал":"МРЯФФ!!",
-            "в рот ебал":"МРЯФФ!!", "ебал":"мряк-мрря!", "Ебал":"МРЯФФ!!",
-            "хуёво":"ньёрфф...", "Хуёво":"Ньёрфф...", "пидрилит":"мряк-мрря!",
-            "Пидрилит":"Мряк-мрря!",
-        }
+        if(not self.is_encrypt(text)):
+            words = text.split()
+            new_words = []
+            for word in words:
+                if word.lower().startswith("н") and len(word) > 2 and (random.random() < 0.05 or self.bad_minded):
+                    word = "ня" + word[2:]
+                if random.random() < 0.05 or self.bad_minded:
+                    word = word.replace("р", "р-" * random.randint(2,4)+"р")
+                    word = word.replace("r", "r" * random.randint(2,4)+"r")
+                new_words.append(word)
+            text = " ".join(new_words)
 
-        for key, value in replacements.items():
-            text = text.replace(key, value)
+            replacements = {
+                "ничего": "нячего", "что?": "ня?", "ура!": "ня!", "о нет": "о-ня!",
+                "привет": "мяувет", "Привет": "Мяувет", "хорошо":"мяу-ряско",
+                "плохо":"мяу-чалька", "пиздец":"мря!", "Пиздец":"Мря!",
+                "блять":"мяр!", "Блять":"Мяр!", "замечательные":"замуррчательные",
+                "замечательный":"замуррчательный", "замечательных":"замуррчательных",
+                "Замечательные":"Замуррчательные", "Замечательный":"Замуррчательный",
+                "Замечательных":"Замуррчательных", "прекрасное":"замурчательное",
+                "Прекрасное":"Замурчательное", "прекрасный":"замурчательный",
+                "Прекрасный":"Замурчательный", "прекрасная":"замурчательная",
+                "Прекрасная":"Замурчательная", "заебись":"замурчательно",
+                "Заебись":"Замурчательно", "охуенно":"замурчательно",
+                "Охуенно":"Замурчательно", "няхуя":"МРЯВ?! Ньё-ньё!!",
+                "Няхуя":"МРЯВ?! Ньё-ньё!!", "няко":"неко", "Няко":"неко",
+                "нядо":"надо", "Нядо":"Надо", "В рот ебал":"МРЯФФ!!",
+                "в рот ебал":"МРЯФФ!!", "ебал":"мряк-мрря!", "Ебал":"МРЯФФ!!",
+                "хуёво":"ньёрфф...", "Хуёво":"Ньёрфф...", "пидрилит":"мряк-мрря!",
+                "Пидрилит":"Мряк-мрря!",
+            }
 
-        if random.random() < 0.3:
-            text += " мяу~"
-        elif random.random() < 0.2:
-            text += "-ня"
+            specialchar = [",",".","<",">","/","''",'""',":",";","{","}","[","]","|","!","@","#","$","%","^","&","?","*","(",")","-","_","+","=","`","~","№"]
+
+            for key, value in replacements.items():
+                if(random.random()<0.05 or self.bad_minded):
+                    text = text.replace(key, value)
+
+            if random.random() < 0.05 or self.bad_minded:
+                    text += " мяу~"
+            elif random.random() < 0.05 or self.bad_minded:
+                if(text[-1:] in specialchar):
+                    text=text[:-1]+"-ня"+text[-1:]
+                else:
+                    text += "-ня"
 
         return text
 
@@ -101,6 +123,12 @@ class NekoSpeakModule(loader.Module):
         self.public_enabled = not self.public_enabled
         status = "включено" if self.public_enabled else "выключено"
         await utils.answer(message, f"Ня! Преобразование в публичных чатах теперь {status}.")
+
+    @loader.command(ru_doc="Отключает рандом, преобразовывает всё без шансов спастись")
+    async def nekospeakdumb(self, message: Message):
+        self.bad_minded = not self.bad_minded
+        status = "отключён" if self.bad_minded else "включён"
+        await utils.answer(message, f"Ня! Рандом {status}.")
 
     @loader.command(ru_doc="Заблокировать чат для работы модуля")
     async def nekospeakex(self, message: Message):
