@@ -127,7 +127,7 @@ class NekoSpeakModule(loader.Module):
     @loader.command(ru_doc="Отключает рандом, преобразовывает всё без шансов спастись")
     async def nekospeakdumb(self, message: Message):
         self.bad_minded = not self.bad_minded
-        status = "включён" if self.bad_minded else "отключён"
+        status = "отключён" if self.bad_minded else "включён"
         await utils.answer(message, f"Ня! Рандом {status}.")
 
     @loader.command(ru_doc="Заблокировать чат для работы модуля")
