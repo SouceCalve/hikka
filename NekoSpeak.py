@@ -23,6 +23,7 @@ class NekoSpeakModule(loader.Module):
         self.public_enabled = False
         # Загружаем из БД или создаём новый список
         self.banned_chats = set()
+        self.bad_minded = False
 
     async def client_ready(self):
         saved = self.db.get("NekoSpeak", "banned_chats", [])
@@ -49,9 +50,9 @@ class NekoSpeakModule(loader.Module):
             words = text.split()
             new_words = []
             for word in words:
-                if word.lower().startswith("н") and len(word) > 2 and random.random() < 0.05:
+                if word.lower().startswith("н") and len(word) > 2 and (random.random() < 0.05 or self.bad_minded):
                     word = "ня" + word[2:]
-                if random.random() < 0.05:
+                if random.random() < 0.05 or self.bad_minded:
                     word = word.replace("р", "р-" * random.randint(2,4)+"р")
                     word = word.replace("r", "r" * random.randint(2,4)+"r")
                 new_words.append(word)
@@ -80,12 +81,12 @@ class NekoSpeakModule(loader.Module):
             specialchar = [",",".","<",">","/","''",'""',":",";","{","}","[","]","|","!","@","#","$","%","^","&","?","*","(",")","-","_","+","=","`","~","№"]
 
             for key, value in replacements.items():
-                if(random.random()<0.05):
+                if(random.random()<0.05 or self.bad_minded):
                     text = text.replace(key, value)
 
-            if random.random() < 0.05:
+            if random.random() < 0.05 or self.bad_minded:
                     text += " мяу~"
-            elif random.random() < 0.05:
+            elif random.random() < 0.05 or self.bad_minded:
                 if(text[-1:] in specialchar):
                     text=text[:-1]+"-ня"+text[-1:]
                 else:
@@ -122,6 +123,12 @@ class NekoSpeakModule(loader.Module):
         self.public_enabled = not self.public_enabled
         status = "включено" if self.public_enabled else "выключено"
         await utils.answer(message, f"Ня! Преобразование в публичных чатах теперь {status}.")
+
+    @loader.command(ru_doc="Отключает рандом, преобразовывает всё без шансов спастись")
+    async def nekospeakdumb(self, message: Message):
+        self.bad_minded = not self.bad_minded
+        status = "включён" if self.bad_minded else "отключён"
+        await utils.answer(message, f"Ня! Рандом {status}.")
 
     @loader.command(ru_doc="Заблокировать чат для работы модуля")
     async def nekospeakex(self, message: Message):
